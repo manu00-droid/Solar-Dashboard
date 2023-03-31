@@ -406,10 +406,10 @@ body.dark .footer .text {
     height: 300px;
 }
 
-body.dark .money_saved {
-    border-color: #FFF
+/* body.dark .money_saved grid line.x {
+    stroke: var(--body-color);
 }
 
-body.dark .electricity_chart {
-    border-color: var(--body-color);
-}
+body.dark .electricity_chart grid line.y {
+    stroke: var(--body-color);
+} */
