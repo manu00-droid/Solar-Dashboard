@@ -133,26 +133,42 @@ setInterval(() => {
 
 document.addEventListener('DOMContentLoaded', function () {
     // Function to fetch data from Django microservice
-    function fetchData() {
+    function fetchDataAndUpdateChart() {
         fetch('http://127.0.0.1:8000/getVoltage/')
             .then(response => response.json())
             .then(data => {
-                // Update the content of the voltage card
-                // console.log(data);
+                // Update the voltage card
                 const voltageElement = document.getElementById('staticVoltageValue');
                 voltageElement.innerHTML = `Static Voltage Generated:<br>${data} volts`;
+
+                // Update the chart data
+                updateChartData(moneyChart, data);
             })
             .catch(error => console.error('Error fetching data:', error));
     }
 
-    // Fetch data initially
-    fetchData();
+    // Function to update the chart data
+    function updateChartData(chart, newData) {
+        // Assuming newData is an array of voltage values
+        chart.data.datasets[0].data = newData;
+        chart.update();
+    }
 
     // Fetch data every X milliseconds (e.g., every 5000 milliseconds or 5 seconds)
-    setInterval(fetchData, 10000);
+    setInterval(fetchData, 2000);
 });
 
 // requesting for the voltage from the servers============================================//
+
+
+
+
+
+
+
+
+
+
 
 
 // requesting for the current from the servers============================================//
