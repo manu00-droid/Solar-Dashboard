@@ -200,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('weather-condition').textContent = conditionText;
             document.getElementById('weather-icon').src = iconUrl;
             document.getElementById('temperature').textContent = `${temperatureCelsius} °C`;
+            document.getElementById('city').textContent = "Patiala";
         })
         .catch(error => console.error('Error fetching weather data:', error));
 });
