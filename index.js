@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Update the content of the voltage card
                 // console.log(data);
                 const voltageElement = document.getElementById('staticVoltageValue');
-                voltageElement.innerText = `Static Voltage Generated: ${data} volts`;
+                voltageElement.innerHTML = `Static Voltage Generated:<br>${data} volts`;
             })
             .catch(error => console.error('Error fetching data:', error));
     }
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Update the content of the current card
                 // console.log(data);
                 const voltageElement = document.getElementById('rotationalVoltageValue');
-                voltageElement.innerText = `Rotational Voltage Generated: ${data} A`;
+                voltageElement.innerText = `Rotational Voltage Generated: ${data} volts`;
             })
             .catch(error => console.error('Error fetching data:', error));
     }
