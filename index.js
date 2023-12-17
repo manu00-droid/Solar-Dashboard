@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchData();
 
     // Fetch data every X milliseconds (e.g., every 5000 milliseconds or 5 seconds)
-    setInterval(fetchData, 2000);
+    setInterval(fetchData, 10000);
 });
 
 // requesting for the voltage from the servers============================================//
