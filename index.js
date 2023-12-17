@@ -139,10 +139,81 @@ setInterval(() => {
 
 
 
+// requesting for the voltage from the servers============================================//
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Function to fetch data from Django microservice
+    function fetchData() {
+        fetch('http://127.0.0.1:8000/getVoltage/')
+            .then(response => response.json())
+            .then(data => {
+                // Update the content of the voltage card
+                // console.log(data);
+                const voltageElement = document.getElementById('staticVoltageValue');
+                voltageElement.innerText = `Static Voltage Generated: ${data} volts`;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    // Fetch data initially
+    fetchData();
+
+    // Fetch data every X milliseconds (e.g., every 5000 milliseconds or 5 seconds)
+    setInterval(fetchData, 2000);
+});
+
+// requesting for the voltage from the servers============================================//
 
 
+// requesting for the current from the servers============================================//
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Function to fetch data from Django microservice
+    function fetchData() {
+        fetch('http://127.0.0.1:8000/getCurrent/')
+            .then(response => response.json())
+            .then(data => {
+                // Update the content of the current card
+                // console.log(data);
+                const voltageElement = document.getElementById('rotationalVoltageValue');
+                voltageElement.innerText = `Rotational Voltage Generated: ${data} A`;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    // Fetch data initially
+    fetchData();
+
+    // Fetch data every X milliseconds (e.g., every 5000 milliseconds or 5 seconds)
+    setInterval(fetchData, 2000);
+});
+
+
+// requesting for the current from the servers============================================//
+
+// requesting for weather data
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Replace the API key and location in the URL
+    const weatherAPI = 'http://api.weatherapi.com/v1/current.json?key=93c1efde3d1449f3a99130655231712&q=Patiala&aqi=no';
+
+    // Fetch weather data
+    fetch(weatherAPI)
+        .then(response => response.json())
+        .then(data => {
+            // Extract required information
+            const conditionText = data.current.condition.text;
+            const iconUrl = `http:${data.current.condition.icon}`;
+            const temperatureCelsius = data.current.temp_c;
+
+            // Update DOM elements
+            document.getElementById('weather-condition').textContent = conditionText;
+            document.getElementById('weather-icon').src = iconUrl;
+            document.getElementById('temperature').textContent = `${temperatureCelsius} °C`;
+        })
+        .catch(error => console.error('Error fetching weather data:', error));
+});
 
 
 //Toggling dark mode and sidebar =========================================================//

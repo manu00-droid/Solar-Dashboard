@@ -368,18 +368,31 @@ body.dark .footer .text {
 }
 
 
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Center items vertically within the dashboard-header */
+}
 
+#weather-info {
+    display: flex;
+    align-items: center;
+    font-weight: lighter;
+}
 
+#temperature {
+    padding-left: 50px;
+}
 
-
-
-
-
-
+#weather-icon {
+    margin-right: 10px;
+}
 
 
 .dashboard {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     margin-top: 20px;
 
@@ -387,15 +400,23 @@ body.dark .footer .text {
 
 .card {
     width: 45%;
+    margin-bottom: 10px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     padding: 20px;
     background-color: var(--body-color);
     transition: var(--tran-05);
-
-
 }
+
+.voltage-card {
+    height: 100%;
+}
+
+.current-card {
+    height: 100%;
+}
+
 
 .card h2 {
     font-size: 24px;

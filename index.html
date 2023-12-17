@@ -94,9 +94,23 @@
     </nav>
 
     <section class="home">
-        <div class="text">SOLAR DASHBOARD
+        <div class="text">
+            <div class="dashboard-header">
+                <h1>SOLAR DASHBOARD</h1>
+                <div id="weather-info">
+                    <img src="" alt="Weather Icon" id="weather-icon">
+                    <p id="weather-condition"></p>
+                    <p id="temperature"></p>
+                </div>
+            </div>
 
             <div class="dashboard">
+                <div class="card static-voltage-card">
+                    <h4 id="staticVoltageValue"></h4>
+                </div>
+                <div class="card rotational-voltage-card">
+                    <h4 id="rotationalVoltageValue"></h4>
+                </div>
                 <div class="card">
                     <h2>Money Saved</h2>
                     <div class="graph">
