@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Update the content of the current card
                 // console.log(data);
                 const voltageElement = document.getElementById('rotationalVoltageValue');
-                voltageElement.innerText = `Rotational Voltage Generated: ${data} A`;
+                voltageElement.innerText = `Rotational Voltage Generated: ${data} volts`;
             })
             .catch(error => console.error('Error fetching data:', error));
     }
