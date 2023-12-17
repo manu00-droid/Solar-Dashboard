@@ -2,51 +2,53 @@
 
 
 
+// Get the canvas element for the chart
+// Get the canvas element for the chart
+const combinedCanvas = document.getElementById('combined-chart');
 
-
-const moneyCanvas = document.getElementById('money-chart');
-
-const moneyData = {
+// Combined data for Money and Electricity Generated
+const combinedData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    datasets: [{
-        label: 'Money',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
-    }]
+    datasets: [
+        {
+            label: 'Static Solar',
+            data: [65, 59, 80, 81, 56, 55, 40],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)', // Color for Money
+            tension: 0.1
+        },
+        {
+            label: 'Dynamic Solar',
+            data: [30, 40, 50, 60, 70, 80, 90], // Different data for Electricity
+            fill: false,
+            borderColor: 'rgb(192, 75, 75)', // Different color for Electricity
+            tension: 0.1
+        }
+    ]
 };
 
-
-
+// Common options for display
 const DISPLAY = true;
-const BORDER = true;
 const CHART_AREA = true;
+const BORDER = true;
 const TICKS = true;
 
-const moneyConfig = {
+// Configuration for the combined chart
+const combinedConfig = {
     type: 'line',
-    data: moneyData,
+    data: combinedData,
     options: {
         responsive: true,
         scales: {
             x: {
-                border: {
-                    display: true,
-                },
-
                 grid: {
                     display: DISPLAY,
                     drawOnChartArea: CHART_AREA,
                     drawTicks: TICKS,
                     color: "#707070"
-
                 }
             },
             y: {
-                border: {
-                    display: true,
-                },
                 grid: {
                     color: "#707070"
                 }
@@ -54,23 +56,22 @@ const moneyConfig = {
         }
     },
 };
-const moneyChart = new Chart(moneyCanvas, moneyConfig);
+
+// Create the combined chart
+const combinedChart = new Chart(combinedCanvas, combinedConfig);
 
 
 
 
-// Money Chart =========================================================//
 
 
-//electricity chart =========================================================//
-
-const electricityCanvas = document.getElementById('electricity-chart');
+const predictedCanvas = document.getElementById('predicted-chart');
 
 
-const electricityData = {
+const predictedData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     datasets: [{
-        label: 'Electricity Generated',
+        label: 'Predicted Power',
         data: [65, 59, 80, 81, 56, 55, 40],
         fill: false,
         borderColor: 'rgb(75, 192, 192)',
@@ -79,9 +80,9 @@ const electricityData = {
 };
 
 
-const electricityConfig = {
+const predictedConfig = {
     type: 'line',
-    data: electricityData,
+    data: predictedData,
     options: {
         responsive: true,
         scales: {
@@ -109,20 +110,8 @@ const electricityConfig = {
     },
 };
 
-const electricityChart = new Chart(electricityCanvas, electricityConfig);
+const predictedChart = new Chart(predictedCanvas, predictedConfig);
 
-
-
-
-//electricity chart =========================================================//
-
-
-
-
-
-
-
-// updating the data of charts =========================================================//
 
 
 
