@@ -136,9 +136,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to fetch data from Django microservice and update chart
     function fetchData() {
-        fetch('http://localhost:8000/getVoltage/')
-
-            .then(response => response.json())
+        fetch('https://ruling-kindly-porpoise.ngrok-free.app/getVoltage/', {
+            method: 'GET', // or 'POST' or any other HTTP method
+            headers: {
+              'ngrok-skip-browser-warning': 'true'
+            }})
+            .then(response =>{
+                console.log("HENLO")
+                // console.log(response.json())
+                 return response.json()})
             .then(data => {
                 // Update the voltage card
                 const staticVoltageElement = document.getElementById('staticVoltageValue');
@@ -173,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Fetch data and update chart every 2 seconds
-    setInterval(fetchData, 2000);
+    setInterval(fetchData, 10000);
 });
 
 
