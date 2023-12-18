@@ -1,67 +1,8 @@
-// Money Chart =========================================================//
-
-
-
-// Get the canvas element for the chart
-// Get the canvas element for the chart
-const combinedCanvas = document.getElementById('combined-chart');
-
-// Combined data for Money and Electricity Generated
-const combinedData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    datasets: [
-        {
-            label: 'Static Solar',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)', // Color for Money
-            tension: 0.1
-        },
-        {
-            label: 'Dynamic Solar',
-            data: [30, 40, 50, 60, 70, 80, 90], // Different data for Electricity
-            fill: false,
-            borderColor: 'rgb(192, 75, 75)', // Different color for Electricity
-            tension: 0.1
-        }
-    ]
-};
-
-// Common options for display
+// // Common options for display
 const DISPLAY = true;
 const CHART_AREA = true;
 const BORDER = true;
 const TICKS = true;
-
-// Configuration for the combined chart
-const combinedConfig = {
-    type: 'line',
-    data: combinedData,
-    options: {
-        responsive: true,
-        scales: {
-            x: {
-                grid: {
-                    display: DISPLAY,
-                    drawOnChartArea: CHART_AREA,
-                    drawTicks: TICKS,
-                    color: "#707070"
-                }
-            },
-            y: {
-                grid: {
-                    color: "#707070"
-                }
-            }
-        }
-    },
-};
-
-// Create the combined chart
-const combinedChart = new Chart(combinedCanvas, combinedConfig);
-
-
-
 
 
 
@@ -115,11 +56,6 @@ const predictedChart = new Chart(predictedCanvas, predictedConfig);
 
 
 
-setInterval(() => {
-    const newData = [0, 10, 20, 30, 40];
-    moneyChart.data.datasets[0].data = newData;
-    moneyChart.update();
-}, 1000); // update every 1 seconds
 
 
 
@@ -132,70 +68,91 @@ setInterval(() => {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Function to fetch data from Django microservice
-    function fetchDataAndUpdateChart() {
+    // Initialize empty arrays to store fetched data
+    var timeLabels = [];
+    var staticVoltageData = [];
+    var rotationalVoltageData = [];
+
+    // Get the canvas element and create a 2D rendering context
+    var ctx = document.getElementById('combined-chart').getContext('2d');
+
+    // Create the combined chart (initially with empty data)
+    var combinedChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: timeLabels,
+            datasets: [
+                {
+                    label: 'Static Voltage',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: staticVoltageData,
+                    fill: false,
+                },
+                {
+                    label: 'Rotational Voltage',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    data: rotationalVoltageData,
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: 'Time',
+                    },
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Voltage',
+                    },
+                },
+            },
+        },
+    });
+
+    let currentTime = 0;
+
+    // Function to fetch data from Django microservice and update chart
+    function fetchData() {
         fetch('http://127.0.0.1:8000/getVoltage/')
             .then(response => response.json())
             .then(data => {
                 // Update the voltage card
-                const voltageElement = document.getElementById('staticVoltageValue');
-                voltageElement.innerHTML = `Static Voltage Generated:<br>${data} volts`;
+                const staticVoltageElement = document.getElementById('staticVoltageValue');
+                staticVoltageElement.innerHTML = `Static Voltage Generated:<br>${data['staticVoltage']} volts`;
 
-                // Update the chart data
-                updateChartData(moneyChart, data);
+                const rotationalVoltageElement = document.getElementById('rotationalVoltageValue'); // Corrected typo here
+                rotationalVoltageElement.innerHTML = `Rotational Voltage Generated:<br>${data['rotationalVoltage']} volts`;
+
+                // Add the current time and voltages to the arrays
+                // var currentTime = new Date().toLocaleTimeString();
+                // console.log(currentTime);
+                currentTime += 2;
+                timeLabels.push(currentTime);
+                staticVoltageData.push(data['staticVoltage']);
+                rotationalVoltageData.push(data['rotationalVoltage']);
+                // Update the chart with the new data
+                combinedChart.data.labels = timeLabels;
+                combinedChart.data.datasets[0].data = staticVoltageData;
+                combinedChart.data.datasets[1].data = rotationalVoltageData;
+
+                // Update the chart
+                combinedChart.update();
+                combinedChart.render();
             })
             .catch(error => console.error('Error fetching data:', error));
     }
 
-    // Function to update the chart data
-    function updateChartData(chart, newData) {
-        // Assuming newData is an array of voltage values
-        chart.data.datasets[0].data = newData;
-        chart.update();
-    }
-
-    // Fetch data every X milliseconds (e.g., every 5000 milliseconds or 5 seconds)
+    // Fetch data and update chart every 2 seconds
     setInterval(fetchData, 2000);
 });
 
-// requesting for the voltage from the servers============================================//
-
-
-
-
-
-
-
-
-
-
-
-
-// requesting for the current from the servers============================================//
-
-document.addEventListener('DOMContentLoaded', function () {
-    // Function to fetch data from Django microservice
-    function fetchData() {
-        fetch('http://127.0.0.1:8000/getCurrent/')
-            .then(response => response.json())
-            .then(data => {
-                // Update the content of the current card
-                // console.log(data);
-                const voltageElement = document.getElementById('rotationalVoltageValue');
-                voltageElement.innerText = `Rotational Voltage Generated: ${data} volts`;
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
-
-    // Fetch data initially
-    fetchData();
-
-    // Fetch data every X milliseconds (e.g., every 5000 milliseconds or 5 seconds)
-    setInterval(fetchData, 2000);
-});
-
-
-// requesting for the current from the servers============================================//
 
 // requesting for weather data
 
