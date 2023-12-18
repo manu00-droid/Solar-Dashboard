@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 y: {
                     title: {
                         display: true,
-                        text: 'Voltage',
+                        text: 'Power',
                     },
                 },
             },
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var timeLabels = [];
     var staticVoltageData = [];
     var rotationalVoltageData = [];
-
+    console.log("hello");
     // Get the canvas element and create a 2D rendering context
     var ctx = document.getElementById('combined-chart').getContext('2d');
 
@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
                 // Update the voltage card
+                console.log(data);
                 const staticVoltageElement = document.getElementById('staticVoltageValue');
                 staticVoltageElement.innerHTML = `Static Voltage Generated:<br>${data['staticVoltage']} volts`;
 
@@ -191,8 +192,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Error fetching data:', error));
     }
 
-    // Fetch data and update chart every 2 seconds
-    setInterval(fetchData, 10000);
+    // Fetch data and update chart every 5 seconds
+    setInterval(fetchData, 5000);
 });
 
 
