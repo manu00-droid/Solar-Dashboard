@@ -4,65 +4,81 @@ const CHART_AREA = true;
 const BORDER = true;
 const TICKS = true;
 
+//predicted voltage chart=============================//
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize empty arrays to store fetched data
+    var timeLabels = [];
+    var predictedVoltageData = [];
 
-const predictedCanvas = document.getElementById('predicted-chart');
+    // Get the canvas element and create a 2D rendering context
+    var ctx = document.getElementById('predicted-chart').getContext('2d');
 
-
-const predictedData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    datasets: [{
-        label: 'Predicted Power',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
-    }]
-};
-
-
-const predictedConfig = {
-    type: 'line',
-    data: predictedData,
-    options: {
-        responsive: true,
-        scales: {
-            x: {
-                border: {
-                    display: BORDER
+    // Create the combined chart (initially with empty data)
+    var predictedChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: timeLabels,
+            datasets: [
+                {
+                    label: 'Predicted Power',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: predictedVoltageData,
+                    fill: false,
                 },
-
-                grid: {
-                    display: DISPLAY,
-                    drawOnChartArea: CHART_AREA,
-                    drawTicks: TICKS,
-                    color: "#707070"
-                }
+            ],
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: 'Time',
+                    },
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Voltage',
+                    },
+                },
             },
-            y: {
-                border: {
-                    display: true
-                },
-                grid: {
-                    color: "#707070"
-                }
-            }
-        }
-    },
-};
+        },
+    });
 
-const predictedChart = new Chart(predictedCanvas, predictedConfig);
+    let currentTime = 0;
 
+    // Function to fetch data from Django microservice and update chart
+    function fetchData() {
 
+        fetch('http://localhost:8000/getPrediction/')
 
+            .then(response => response.json())
+            .then(data => {
+                // Update the voltage card
 
+                // Add the current time and voltages to the arrays
+                // var currentTime = new Date().toLocaleTimeString();
+                // console.log(currentTime);
+                currentTime += 2;
+                timeLabels.push(currentTime);
+                predictedVoltageData.push(data['predictedWattage']);
+                // Update the chart with the new data
+                predictedChart.data.labels = timeLabels;
+                predictedChart.data.datasets[0].data = predictedVoltageData;
 
+                // Update the chart
+                predictedChart.update();
+                predictedChart.render();
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
 
-
-// updating the data of charts =========================================================//
-
-
-
+    // Fetch data and update chart every 2 seconds
+    // setInterval(fetchData, 2000);
+});
 
 // requesting for the voltage from the servers============================================//
 
@@ -120,7 +136,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to fetch data from Django microservice and update chart
     function fetchData() {
-        fetch('http://127.0.0.1:8000/getVoltage/')
+        fetch('http://localhost:8000/getVoltage/')
+
             .then(response => response.json())
             .then(data => {
                 // Update the voltage card
@@ -137,6 +154,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 timeLabels.push(currentTime);
                 staticVoltageData.push(data['staticVoltage']);
                 rotationalVoltageData.push(data['rotationalVoltage']);
+                if (staticVoltageData.length > 20) {
+                    staticVoltageData.shift();
+                }
+                if (rotationalVoltageData.length > 20) {
+                    rotationalVoltageData.shift();
+                }
                 // Update the chart with the new data
                 combinedChart.data.labels = timeLabels;
                 combinedChart.data.datasets[0].data = staticVoltageData;
@@ -154,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// requesting for weather data
+// requesting for weather data=============================================//
 
 document.addEventListener("DOMContentLoaded", function () {
     // Replace the API key and location in the URL
@@ -180,9 +203,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 //Toggling dark mode and sidebar =========================================================//
-
-
-
 
 const body = document.querySelector('body'),
     sidebar = body.querySelector('nav'),
@@ -225,4 +245,3 @@ modeSwitch.addEventListener("click", () => {
 });
 
 
-//Toggling dark mode and sidebar =========================================================//
