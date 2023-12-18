@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         options: {
             scales: {
                 x: {
-                    type: 'linear',
+                    type: 'category',
                     position: 'bottom',
                     title: {
                         display: true,
@@ -48,36 +48,49 @@ document.addEventListener('DOMContentLoaded', function () {
         },
     });
 
-    let currentTime = 0;
 
     // Function to fetch data from Django microservice and update chart
     function fetchData() {
 
-        fetch('http://localhost:8000/getPrediction/')
+        fetch('https://ruling-kindly-porpoise.ngrok-free.app/getPrediction/', {
+            method: 'GET', // or 'POST' or any other HTTP method
+            headers: {
+                'ngrok-skip-browser-warning': 'true'
+            }
+        })
 
-            .then(response => response.json())
+            .then(response => {
+                return response.json();
+            })
             .then(data => {
-                // Update the voltage card
+                data = data['1']
+                console.log(data)
+                let categories = [];
+                let wattage = [];
 
-                // Add the current time and voltages to the arrays
-                // var currentTime = new Date().toLocaleTimeString();
-                // console.log(currentTime);
-                currentTime += 2;
-                timeLabels.push(currentTime);
-                predictedVoltageData.push(data['predictedWattage']);
+                for (let key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        let entry = data[key];
+                        // Limit the length of the label to 6 characters
+                        let label = entry[0].substring(0, 10);
+                        categories.push(label);
+                        wattage.push(entry[1]);
+                    }
+                }
+
+                labels = categories;
+                predictedVoltageData = wattage;
+
                 // Update the chart with the new data
-                predictedChart.data.labels = timeLabels;
+                predictedChart.data.labels = labels;
                 predictedChart.data.datasets[0].data = predictedVoltageData;
 
                 // Update the chart
                 predictedChart.update();
-                predictedChart.render();
             })
             .catch(error => console.error('Error fetching data:', error));
     }
-
-    // Fetch data and update chart every 2 seconds
-    // setInterval(fetchData, 2000);
+    fetchData();
 });
 
 // requesting for the voltage from the servers============================================//
@@ -139,12 +152,12 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('https://ruling-kindly-porpoise.ngrok-free.app/getVoltage/', {
             method: 'GET', // or 'POST' or any other HTTP method
             headers: {
-              'ngrok-skip-browser-warning': 'true'
-            }})
-            .then(response =>{
-                console.log("HENLO")
-                // console.log(response.json())
-                 return response.json()})
+                'ngrok-skip-browser-warning': 'true'
+            }
+        })
+            .then(response => {
+                return response.json()
+            })
             .then(data => {
                 // Update the voltage card
                 const staticVoltageElement = document.getElementById('staticVoltageValue');
