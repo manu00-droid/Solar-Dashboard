@@ -114,22 +114,27 @@ body {
 
   }
   .frontSide p{
-    font-size: xx-large;
+    padding-top:3%;
+    font-size: 3em;
   }
   .backSide p{
-    font-size: xx-large;
+    padding-top:3%;
+
+    font-size: 3em;
   }
   .Content-left{
     padding: 10%;
 
      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
+    font-size: 1.5em;
 
 
 
   }
   .Content-right{
     padding: 10%;
+    font-size: 1.5em;
 
      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
